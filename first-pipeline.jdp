@@ -3,17 +3,26 @@ pipeline {
     stages {
         stage('Pull') {
             steps {
-               git 'https://github.com/AkshayParsade/studentapp-ui.git'
+               git branch: 'develop', url: 'https://github.com/cloud-blitz/angular-java.git'
             }
         }
         stage('Build') {
             steps {
-               sh '/opt/maven/bin/mvn clean package'
+               sh '''cd sprig-backend
+               /opt/maven/bin/mvn clean package'''
             }
         }
-        stage('Test') {
-            steps {
-               echo 'Test Success'
+//         stage('Test') {
+//             steps {
+//                sh '/opt/maven/bin/mvn sonar:sonar   -Dsonar.projectKey=studentapp   -Dsonar.host.url=http://13.234.38.135:9000   -Dsonar.login=sqp_017f56e803c4f99fe6a97c0aa6dfe53113f003f0
+// '
+//             }
+      stage('Test') {
+          steps {
+             withSonarQubeEnv(installationNAme: 'sonar' ,credentialsId:'sonar-token') {
+                // some block
+              }
+             sh '/opt/maven/bin/mvn sonar:sonar'
             }
         }
         stage('Deploy') {
