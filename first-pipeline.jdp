@@ -3,26 +3,31 @@ pipeline {
     stages {
         stage('Pull') {
             steps {
-               git branch: 'develop', url: 'https://github.com/cloud-blitz/angular-java.git'
+                git 'https://github.com/shubhamkalsait/studentapp-ui.git'
             }
         }
         stage('Build') {
             steps {
-               sh '''cd sprig-backend
-               /opt/maven/bin/mvn clean package'''
+                sh '/opt/maven/bin/mvn clean package'
             }
         }
-//         stage('Test') {
-//             steps {
-//                sh '/opt/maven/bin/mvn sonar:sonar   -Dsonar.projectKey=studentapp   -Dsonar.host.url=http://13.234.38.135:9000   -Dsonar.login=sqp_017f56e803c4f99fe6a97c0aa6dfe53113f003f0
-// '
-//             }
-      stage('Test') {
-          steps {
-             withSonarQubeEnv(installationName: 'sonar' ,credentialsId:'sonar-token') {
-                // some block
-              }
-             sh '/opt/maven/bin/mvn sonar:sonar'
+        // stage('Test') {
+        //     steps {
+        //         sh '/opt/maven/bin/mvn sonar:sonar   -Dsonar.projectKey=studentapp   -Dsonar.host.url=http://18.218.5.157:9000   -Dsonar.login=sqp_5ee3d60a4ef5e16f18c411af0de0f8e0c9199f6a'
+        //     }
+        // }
+        stage('Test') {
+            steps {
+                withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-token') {
+                    sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp'
+                }           
+            }
+        }
+        stage('QualityGate') {
+            steps {
+                timeout(10) {
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token'
+                }
             }
         }
         stage('Deploy') {
