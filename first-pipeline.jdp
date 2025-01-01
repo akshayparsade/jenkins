@@ -30,11 +30,24 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
-            steps {
-                deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://172.31.40.235:8081')], contextPath: '/ ', war: 'target/*.war'
+        // stage('Deploy') {
+        //     steps {
+        //         deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://172.31.40.235:8081')], contextPath: '/ ', war: 'target/*.war'
+        //     }
 
-            }
-        }
-    }
+        stage('Delivery') {
+            steps {
+              echo 'Deploying to S3...'
+                withCredentials([aws(credentialsId: AWS_CREDENTIALS_ID)]) {
+                   
+                      sh 'aws s3 cp target/studentapp-2.0-SNAPSHOT.war s3://${my-studentapp-bux }'
+                    
+                }        
+         } 
+ }
 }
+}
+
+
+
+        
