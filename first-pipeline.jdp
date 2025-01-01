@@ -38,10 +38,8 @@ pipeline {
         stage('Delivery') {
             steps {
               echo 'Deploying to S3...'
-                withCredentials([aws(credentialsId: aws-cred)]) {
-                   
-                      sh 'aws s3 cp target/studentapp-2.0-SNAPSHOT.war s3://${my-studentapp-bux }'
-                    
+                withAWS(credentials: 'aws-cred', region: "${ap-south-1}") {                   
+                      sh 'aws s3 cp target/studentapp-2.0-SNAPSHOT.war s3://${my-studentapp-bux}'    
                 }        
          } 
  }
