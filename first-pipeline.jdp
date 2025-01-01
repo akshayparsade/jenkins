@@ -1,8 +1,5 @@
 pipeline {
-    agent any
- environment {
-        S3_BUCKET_NAME = 'my-studentapp-bux'  // Your S3 bucket name
-        AWS_REGION = 'ap-south-1'  
+    agent any 
     stages {
         stage('Pull') {
             steps {
