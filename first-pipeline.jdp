@@ -40,7 +40,7 @@ pipeline {
               echo 'Deploying to S3...'
                sh 'ls target/'
                 withAWS(credentials: 'aws-cred', region: 'ap-south-1' ){
-                     sh 'aws s3 cp target/studentapp-2.0-SNAPSHOT.war s3://${my-studentapp-bux}'
+                     sh 'aws s3 cp target/studentapp-2.2-SNAPSHOT.war s3://${my-studentapp-bux}'
                 }
          }        
    } 
