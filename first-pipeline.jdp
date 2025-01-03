@@ -35,14 +35,38 @@ pipeline {
         //         deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://172.31.40.235:8081')], contextPath: '/ ', war: 'target/*.war'
         //     }
 
-        stage('Delivery') {
-            steps {
-              echo 'Deploying to S3...'
-                withAWS(credentials: 'aws-cred', region: "${ap-south-1}") {
-                     sh 'aws s3 cp target/studentapp-2.0-SNAPSHOT.war s3://${my-studentapp-bux }'
+       // stage('Delivery') {
+         //   steps {
+        //      echo 'Deploying to S3...'
+         //       withAWS(credentials: 'aws-cred', region: "${ap-south-1}") {
+         //            sh 'aws s3 cp target/studentapp-2.0-SNAPSHOT.war s3://${my-studentapp-bux }'
                     
-                }        
-    } 
+          //      }        
+   // } 
+
+stage('Delivery') {
+    steps {
+        echo 'Deploying to S3...'
+
+        // Correcting the AWS region syntax
+        withAWS(credentials: 'aws-cred', region: 'ap-south-1') {
+            script {
+                def bucketName = 'my-studentapp-bux'  // Replace with your actual bucket name
+                def warFilePath = 'target/studentapp-2.0-SNAPSHOT.war'
+
+                // Check if the WAR file exists before uploading
+                if (fileExists(warFilePath)) {
+                    sh "aws s3 cp ${warFilePath} s3://${my-studentapp-bux}/"
+                    echo "Successfully uploaded ${warFilePath} to s3://${my-studentapp-bux}/"
+                } else {
+                    error "File not found: ${warFilePath}"
+                }
+            }
+        }
+    }
+}
+
+
 }
     }
 }
