@@ -10,7 +10,7 @@ pipeline{
             steps {
                sh ''' cd eks/
                   terraform init
-                  terrafrom plan'''
+                  terraform plan'''
             }
         }
         stage('Deploy'){
