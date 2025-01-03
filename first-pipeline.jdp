@@ -69,7 +69,7 @@ stage('Delivery') {
 
 }
     }
-}
+
 post {
         success {
             echo 'Deployment successful!'
