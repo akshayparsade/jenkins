@@ -1,0 +1,25 @@
+pipeline{
+    agent any
+    stages{
+        stage('Pull'){ 
+            steps {
+            git branch: 'main', url: 'https://github.com/shubhamkalsait/on-cdec-b13-terraform.git'
+            }
+        }
+        stage('Testing') {
+            steps {
+               sh ''' cd eks/
+                  terraform init
+                  terrafrom plan'''
+            }
+        }
+        stage('Deploy'){
+            steps{
+               sh ''' cd eks/
+                  terraform init
+                  terraform apply --auto-approve'''
+            }
+        }
+    }
+}
+   
