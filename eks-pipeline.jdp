@@ -1,0 +1,40 @@
+pipeline {
+    agent any 
+    stages{
+        stage('Pull'){
+          steps{  
+              git 'https://github.com/shubhamkalsait/studentapp-ui.git'
+          }
+        }
+        stage('Build'){
+            steps{
+                sh '/opt/maven/bin/mvn clean package'
+            }
+        }
+        stage('Test'){
+            steps{
+                withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-token') {
+                    sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp'
+               }
+            }
+        }
+        stage('QualityGate'){
+            steps{
+                timeout(10) {
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token'
+                 }
+            }
+        }
+        stage('Deployement'){
+            steps{
+                sh '''
+                docker build . -t akshayparsade/studentapp:latest
+                docker push akshayparsade/studentapp:latest
+                docker rmi akshayparsade/studentapp:latest
+                kubectl apply -f .                
+                '''
+
+            }
+        }
+    }    
+}
