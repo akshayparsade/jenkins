@@ -1,4 +1,4 @@
-pipeline
+pipeline{
     agent any
     stages {
         stage ('Pull') {
@@ -20,5 +20,6 @@ pipeline
             steps {
                 echo 'deploy code successfully'
             }
+       }
     }
-}
+}    
