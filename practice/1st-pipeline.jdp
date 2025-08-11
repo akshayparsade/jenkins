@@ -3,12 +3,13 @@ pipeline{
     stages {
         stage ('Pull') {
             steps {
-                git 'https://github.com/akshayparsade/studentapp-ui.git'
+                git 'https://github.com/akshayparsade/angular-java-project.git'
             }
        }
        stage ('Build') {
-            steps {
-                sh '/opt/maven/bin/mvn clean package'
+            steps { 
+                sh ''' cd spring-backend
+                   /opt/maven/bin/mvn clean package'''
             }
        }
        stage ('Test') {
