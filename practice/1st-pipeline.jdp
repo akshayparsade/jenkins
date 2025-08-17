@@ -16,12 +16,19 @@ pipeline{
     //             sh 'tmvn sonar:sonar   -Dsonar.projectKey=stu   -Dsonar.host.url=http://44.202.130.244:9000   -Dsonar.login=sqp_8907ea43f34c353ed6e21e7fe29435ba211d3702'
     //         }
     //    }
-    stage ('Test') {
+       stage ('Test') {
             steps {
                 withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-code') {
              sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp2'   
-     }
+              }
             }
+       }
+       stage('QualityGate'){
+             steps{
+                timeout(1) {
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonar-code'
+              }   
+             }
        }
        stage ('Deploy') {
             steps {
