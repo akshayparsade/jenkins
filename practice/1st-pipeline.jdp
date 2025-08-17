@@ -13,7 +13,7 @@ pipeline{
        }
        stage ('Test') {
             steps {
-                echo 'test code successfully'
+                sh 'tmvn sonar:sonar   -Dsonar.projectKey=stu   -Dsonar.host.url=http://44.202.130.244:9000   -Dsonar.login=sqp_8907ea43f34c353ed6e21e7fe29435ba211d3702'
             }
        }
        stage ('Deploy') {
