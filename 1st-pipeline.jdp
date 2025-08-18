@@ -8,9 +8,9 @@ pipeline{
        stage ('Build') {
             steps { 
                 sh '''
-            cd studentapp-ui/
-              mvn clean package
-           '''
+            cd /opt/studentapp-ui
+            /opt/maven/bin/mvn clean package
+        '''
             }
        }
     //    stage ('Test') {
