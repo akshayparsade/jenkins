@@ -7,8 +7,8 @@ pipeline{
        }
        stage ('Build') {
             steps { 
-                sh ''' cd spring-backend
-                   /opt/maven/bin/mvn clean package'''
+                sh ''' 
+                   cd /opt/studentapp-ui/mvn clean package'''
             }
        }
     //    stage ('Test') {
