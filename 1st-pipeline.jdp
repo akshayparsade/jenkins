@@ -1,42 +1,60 @@
-pipeline{
+pipeline {
     agent any
+
     stages {
-        stage ('Pull') {
+
+        stage('Pull') {
             steps {
-            git branch: 'master', url: 'https://github.com/akshayparsade/studentapp-ui.git'            }
-       }
-       stage ('Build') {
-            steps { 
-                sh 'sudo rm -rf /opt/studentapp-ui/target'
-                sh '''
-            cd /opt/studentapp-ui
-            /opt/maven/bin/mvn clean package
-        '''
+                // Clone the repo into the Jenkins workspace
+                git branch: 'master', url: 'https://github.com/akshayparsade/studentapp-ui.git'
             }
-       }
-    //    stage ('Test') {
-    //         steps {
-    //             sh 'tmvn sonar:sonar   -Dsonar.projectKey=stu   -Dsonar.host.url=http://44.202.130.244:9000   -Dsonar.login=sqp_8907ea43f34c353ed6e21e7fe29435ba211d3702'
-    //         }
-    //    }
-       stage ('Test') {
+        }
+
+        stage('Build') {
             steps {
+                // Clean target folder in workspace
+                sh 'rm -rf target'
+
+                // Run Maven build
+                sh '/opt/maven/bin/mvn clean package'
+            }
+        }
+
+        stage('Test / SonarQube Analysis') {
+            steps {
+                // Use SonarQube environment
                 withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-token') {
-             sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp3'   
-              }
+                    sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp3'
+                }
             }
-       }
-    //    stage('QualityGate'){
-    //          steps{
-    //             timeout(1) {
-    //                 waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token'
-    //           }   
-    //          }
-    //    }
-       stage ('Deploy') {
+        }
+
+        stage('QualityGate') {
             steps {
-                echo 'deploy code successfully'
+                // Wait for SonarQube QualityGate result
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token'
+                }
             }
-       }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Placeholder for deployment steps
+                echo 'Deploy code successfully'
+            }
+        }
     }
-}    
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+    }
+}
