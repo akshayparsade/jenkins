@@ -3,7 +3,7 @@ pipeline{
     stages {
         stage ('Pull') {
             steps {
-            git branch: 'develop', url: 'https://github.com/akshayparsade/angular-java-project.git'            }
+            git branch: 'master', url: 'https://github.com/akshayparsade/studentapp-ui.git'            }
        }
        stage ('Build') {
             steps { 
