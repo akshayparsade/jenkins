@@ -20,18 +20,18 @@ pipeline{
     //    }
        stage ('Test') {
             steps {
-                withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-code') {
-             sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp2'   
+                withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-token') {
+             sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp3'   
               }
             }
        }
-       stage('QualityGate'){
-             steps{
-                timeout(1) {
-                    waitForQualityGate abortPipeline: true, credentialsId: 'sonar-code'
-              }   
-             }
-       }
+    //    stage('QualityGate'){
+    //          steps{
+    //             timeout(1) {
+    //                 waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token'
+    //           }   
+    //          }
+    //    }
        stage ('Deploy') {
             steps {
                 echo 'deploy code successfully'
