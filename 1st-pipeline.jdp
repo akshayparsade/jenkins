@@ -7,7 +7,7 @@ pipeline{
        }
        stage ('Build') {
             steps { 
-                sh 'rm -rf /opt/studentapp-ui/target'
+                sh 'sudo rm -rf /opt/studentapp-ui/target'
                 sh '''
             cd /opt/studentapp-ui
             /opt/maven/bin/mvn clean package
