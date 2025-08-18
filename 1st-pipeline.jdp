@@ -24,7 +24,7 @@ pipeline {
             steps {
                 // Use SonarQube environment
                 withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-token') {
-                    sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp3'
+                    sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp4'
                 }
             }
         }
