@@ -20,19 +20,13 @@ pipeline {
             }
         }
 
-        stage('Test / SonarQube Analysis') {
-    steps {
-        withSonarQubeEnv('sonar') {
-            withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                sh '''
-                    /opt/maven/bin/mvn sonar:sonar \
-                      -Dsonar.projectKey=studentapp4 \
-                      -Dsonar.login=$SONAR_TOKEN
-                '''
+       stage('Test') {
+            steps {
+                withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-token') {
+                    sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp4'
+                }           
             }
         }
-    }
-}
 
         stage('QualityGate') {
             steps {
