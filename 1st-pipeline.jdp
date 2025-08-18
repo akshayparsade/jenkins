@@ -21,13 +21,18 @@ pipeline {
         }
 
         stage('Test / SonarQube Analysis') {
-            steps {
-                // Use SonarQube environment
-                withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-token') {
-                    sh '/opt/maven/bin/mvn sonar:sonar -Dsonar.projectKey=studentapp4'
-                }
+    steps {
+        withSonarQubeEnv('sonar') {
+            withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                sh '''
+                    /opt/maven/bin/mvn sonar:sonar \
+                      -Dsonar.projectKey=studentapp4 \
+                      -Dsonar.login=$SONAR_TOKEN
+                '''
             }
         }
+    }
+}
 
         stage('QualityGate') {
             steps {
