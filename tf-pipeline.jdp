@@ -1,7 +1,6 @@
-pipelinen{
+pipeline {
    agent any
-
-    stages{
+    stages {
         stage ('Pull') {
             steps {
                 git branch: 'main', url 'https://github.com/akshayparsade/tf_practice.git'
