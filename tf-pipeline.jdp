@@ -8,7 +8,7 @@ pipeline {
         }
         stage ('Test') {
             steps {
-                sh ''' cd /NEW_PRACTICE/eks
+                sh ''' cd NEW_PRACTICE/eks/
                        terraform init
                        terraform plan'''      
             }
