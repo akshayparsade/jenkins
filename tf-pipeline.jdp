@@ -1,0 +1,25 @@
+pipelinen{
+   agent any
+
+    stages{
+        stage ('Pull') {
+            steps {
+                git branch: 'main', url 'https://github.com/akshayparsade/tf_practice.git'
+            }
+        }
+        stage ('Test') {
+            steps {
+                sh ''' cd /NEW_PRACTICE/eks
+                       terraform init
+                       terraform plan'''      
+            }
+        }
+        stage ('Deploy') {
+            steps {
+                sh ''' cd /NEW_PRACTICE/eks
+                       terraform init
+                       terraform apply --auto-approve'''
+            }
+        }
+    }
+}
