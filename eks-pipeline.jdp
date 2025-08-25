@@ -31,10 +31,11 @@ pipeline {
                 docker build . -t akshayparsade/studentapp:latest
                 docker push akshayparsade/studentapp:latest
                 docker rmi akshayparsade/studentapp:latest
-                kubectl apply -f .                
+                kubectl apply -f ./yaml/               
                 '''
 
             }
         }
     }    
 }
+
